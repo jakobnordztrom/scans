@@ -1,0 +1,42 @@
+
+pipeline {
+    agent any
+    environment {
+        NEXUS = credentials('nexus-credentials')
+    }
+    tools {
+        gradle '4.10'
+    }
+    options {
+        gitLabConnection('default')
+    }
+    stages {
+        stage('Build') {
+            steps {
+                updateGitlabCommitStatus name: 'build', state: 'running'
+                sh "gradle buildWithChecks --info -Pnexus_password=${env.NEXUS_PSW}"
+            }
+        }
+        stage('Release') {
+            when {
+                  environment name: 'ORG_GRADLE_PROJECT_ci_release', value: 'true'
+              }
+              steps {
+                  sh "gradle publishRelease --info -Pnexus_password=${env.NEXUS_PSW} -Ppush=true"
+              }
+        }
+
+    }
+    post {
+       failure {
+            updateGitlabCommitStatus name: 'build', state: 'failed'
+        }
+        success {
+            updateGitlabCommitStatus name: 'build', state: 'success'
+        }
+        cleanup {
+            sh "sh /usr/local/bin/post-build.sh ${env.BRANCH_NAME} ${env.BUILD_NUMBER} ${currentBuild.currentResult}"
+        }
+    }
+}
+

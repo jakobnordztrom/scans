@@ -1,0 +1,23 @@
+plugins{
+    id 'com.specsavers.digital.gradle.staccip.staccip-node-gradle-plugin'
+    id 'com.specsavers.digital.gradle.staccip.staccip-docker-gradle-plugin'
+    id 'com.specsavers.digital.gradle.staccip.staccip-release-gradle-plugin'
+}
+
+wrapper {
+    gradleVersion = '4.10'
+}
+
+docker {
+    applicationGroup = 'neo-sds'
+    dockerfile = project.file('Dockerfile')
+}
+
+task copyNpmrc(type: Copy) {
+    from System.getProperty("user.home")
+    into 'build/'
+    include '.npmrc'
+}
+
+awsEcrLogin.dependsOn copyNpmrc
+

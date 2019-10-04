@@ -8,3 +8,5 @@ plugins_*
 output.json
 vscode/*
 .vscode/
+*gradle*
+Staccipfile
