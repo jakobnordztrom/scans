@@ -1,0 +1,27 @@
+pluginManagement {
+  resolutionStrategy {
+    eachPlugin {
+        if (requested.id.id == 'com.specsavers.digital.gradle.staccip.staccip-node-gradle-plugin') {
+            useModule('com.specsavers.digital.gradle.staccip:staccip-node-gradle-plugin:1.0.53')
+        }
+        if (requested.id.id == 'com.specsavers.digital.gradle.staccip.staccip-docker-gradle-plugin') {
+            useModule('com.specsavers.digital.gradle.staccip:staccip-docker-gradle-plugin:2.0.1')
+        }
+        if (requested.id.id == 'com.specsavers.digital.gradle.staccip.staccip-release-gradle-plugin') {
+            useModule('com.specsavers.digital.gradle.staccip:staccip-release-gradle-plugin:1.0.12')
+        }
+     }
+   }
+   repositories {
+     gradlePluginPortal()
+     mavenCentral()
+     maven {
+       credentials {
+         username "$nexus_username"
+         password "$nexus_password"
+       }
+      url 'https://nexus.digital.specsavers.co.uk/nexus/content/repositories/releases'
+    }
+  }
+}
+rootProject.name = 'cloudsploit-wombat'

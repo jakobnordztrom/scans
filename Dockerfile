@@ -1,19 +1,25 @@
 FROM node:8-alpine
 
-# Define a build argment that can be supplied when building the container
-# You can then do the following:
-#
-# docker build --build-arg PACKAGENAME=@myscope/cloudsploit
-#
-# This allows a fork to build their own container from this common Dockerfile.
-# You could also use this to specify a particular version number.
-ARG PACKAGENAME=cloudsploit
+#Output directory, mount to volume
+RUN mkdir /mnt/cloudsploit
+
+#Use nexus npm repo
+ADD build/.npmrc /root/.npmrc
 
 # Install cloudsploit/scan into the container using npm from NPM
-RUN mkdir /var/scan \
-&& cd /var/scan \
-&& npm init --yes \
-&& npm install ${PACKAGENAME}
+RUN mkdir /var/scan/
+ADD package.json /var/scan/
+ADD index.js /var/scan/
+ADD exports.js /var/scan/
+ADD engine.js /var/scan/
+COPY postprocess /var/scan/postprocess/
+COPY plugins /var/scan/plugins/
+COPY other_modules /var/scan/other_modules/
+COPY helpers /var/scan/helpers/
+COPY compliance /var/scan/compliance/
+COPY collectors /var/scan/collectors/
+
+RUN  cd /var/scan && npm install
 
 # Setup the container's path so that you can run cloudsploit directly
 # in case someone wants to customize it when running the container.

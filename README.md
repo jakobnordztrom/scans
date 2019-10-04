@@ -330,3 +330,9 @@ The `addResult` function ensures we are adding the results to the `results` arra
 (results array, score, message, region, resource)
 ```
 The `resource` is optional, and the `score` must be between 0 and 3 to indicate PASS, WARN, FAIL, or UNKNOWN.
+
+
+## Running the scan as a container
+1. Pass ssm path to cross account role and external id as environment variables: ROLE, EXT_ID.
+2. Mount volume on /mnt/cloudsploit
+3. Invoke container with command args '--junit=/mnt/cloudsploit/{profile}-{timestamp}.xml --csv=/mnt/cloudsploit/{profile}-{timestamp}.csv'

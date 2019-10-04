@@ -1,9 +1,9 @@
 
 var async = require('async');
 var plugins = require('./exports.js');
-var complianceControls = require('./compliance/controls.js')
-var suppress = require('./postprocess/suppress.js')
-var output = require('./postprocess/output.js')
+var complianceControls = require('./compliance/controls.js');
+var suppress = require('./postprocess/suppress.js');
+var output = require('./postprocess/output.js');
 
 /**
  * The main function to execute CloudSploit scans.
